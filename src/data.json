@@ -1,0 +1,126 @@
+[
+  {
+    "id": 1,
+    "name": "Espresso",
+    "description": "A strong, black coffee made by forcing steam through ground coffee beans.",
+    "type": "Drink",
+    "size_options": ["Single Shot", "Double Shot"],
+    "price": {
+      "single shot": 2.5,
+      "double shot": 3.5
+    },
+    "ingredients": ["Espresso beans", "Water"],
+    "image_url": "/src/assets/product_images/espresso.png"
+  },
+  {
+    "id": 2,
+    "name": "Americano",
+    "description": "Espresso with added hot water, resulting in a lighter, larger drink.",
+    "type": "Drink",
+    "size_options": ["Small", "Medium", "Large"],
+    "price": {
+      "small": 3.0,
+      "medium": 3.5,
+      "large": 4.0
+    },
+    "ingredients": ["Espresso", "Hot water"],
+    "image_url": "/src/assets/product_images/espresso.png"
+  },
+  {
+    "id": 3,
+    "name": "Latte",
+    "description": "Espresso combined with steamed milk, creating a creamy and smooth texture.",
+    "type": "Drink",
+    "size_options": ["Small", "Medium", "Large"],
+    "price": {
+      "small": 3.5,
+      "medium": 4.0,
+      "large": 4.5
+    },
+    "ingredients": ["Espresso", "Steamed milk", "Foamed milk"],
+    "image_url": "/src/assets/product_images/latte.png"
+  },
+  {
+    "id": 4,
+    "name": "Caramel Cream",
+    "description": "A smooth, creamy blend of espresso and caramel syrup topped with whipped cream.",
+    "type": "Drink",
+    "size_options": ["Small", "Medium", "Large"],
+    "price": {
+      "small": 3.5,
+      "medium": 4.0,
+      "large": 4.5
+    },
+    "ingredients": [
+      "Espresso",
+      "Caramel syrup",
+      "Steamed milk",
+      "Whipped cream"
+    ],
+    "image_url": "/src/assets/product_images/caramelcream.png"
+  },
+  {
+    "id": 5,
+    "name": "Chai Tea",
+    "description": "A spiced tea blend with milk, offering a warm and comforting drink.",
+    "type": "Drink",
+    "size_options": ["Small", "Medium", "Large"],
+    "price": {
+      "small": 3.0,
+      "medium": 3.5,
+      "large": 4.0
+    },
+    "ingredients": ["Black tea", "Spices", "Steamed milk"],
+    "image_url": "/src/assets/product_images/chaitea.png"
+  },
+  {
+    "id": 6,
+    "name": "Chocolate Cream",
+    "description": "A rich, creamy chocolate-flavored beverage topped with whipped cream.",
+    "type": "Drink",
+    "size_options": ["Small", "Medium", "Large"],
+    "price": {
+      "small": 3.5,
+      "medium": 4.0,
+      "large": 4.5
+    },
+    "ingredients": ["Chocolate syrup", "Steamed milk", "Whipped cream"],
+    "image_url": "/src/assets/product_images/chocolatecream.png"
+  },
+  {
+    "id": 7,
+    "name": "Sausage Roll",
+    "description": "A savory snack featuring seasoned sausage wrapped in flaky pastry.",
+    "type": "Food",
+    "size_options": ["One size"],
+    "price": {
+      "one size": 2.5
+    },
+    "ingredients": ["Sausage", "Puff pastry"],
+    "image_url": "/src/assets/product_images/sausageroll.png"
+  },
+  {
+    "id": 8,
+    "name": "Classic Chocolate Cake",
+    "description": "A moist, rich chocolate cake with layers of creamy frosting.",
+    "type": "Food",
+    "size_options": ["One size"],
+    "price": {
+      "one size": 4.0
+    },
+    "ingredients": ["Flour", "Cocoa powder", "Butter", "Sugar", "Eggs"],
+    "image_url": "/src/assets/product_images/classicchocolatecake.png"
+  },
+  {
+    "id": 9,
+    "name": "Cheese Cake",
+    "description": "A smooth and creamy cheesecake made with cream cheese on a biscuit base.",
+    "type": "Food",
+    "size_options": ["One size"],
+    "price": {
+      "one size": 3.5
+    },
+    "ingredients": ["Cream cheese", "Sugar", "Eggs", "Biscuit base"],
+    "image_url": "/src/assets/product_images/cheesecake.png"
+  }
+]

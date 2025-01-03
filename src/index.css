@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-family: "Inter", serif;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* carousel */
+.embla {
+  overflow: hidden;
+}
+
+.embla__container {
+  display: flex;
+  gap: 10px;
+}
+
+.embla__slide {
+  margin: 0 auto;
+  flex: 0 0 100%; /* Default to full width on small screens */
+
+  @media (min-width: 640px) {
+    flex: 0 0 50%; /* Show two slides side-by-side on small screens */
+  }
+
+  @media (min-width: 1024px) {
+    flex: 0 0 33.33%; /* Show three slides side-by-side on medium screens */
+  }
+}
+
+footer ul > li:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
