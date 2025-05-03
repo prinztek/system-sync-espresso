@@ -5,7 +5,12 @@ import Newsletter from "../components/Newsletter";
 import Reviews from "../components/Reviews";
 import products from "../data.json";
 
-function Home({ handleAddToCart }) {
+function Home({
+  handleAddToCart,
+  submitEmail,
+  newsLetterEmail,
+  setNewsLetterEmail,
+}) {
   return (
     <div className="main flex flex-col justify-center items-center">
       <Hero />
@@ -15,7 +20,11 @@ function Home({ handleAddToCart }) {
         products={products.slice(0, 3)}
       />
       <Reviews />
-      <Newsletter />
+      <Newsletter
+        submitEmail={submitEmail}
+        newsLetterEmail={newsLetterEmail}
+        setNewsLetterEmail={setNewsLetterEmail}
+      />
     </div>
   );
 }

@@ -63,10 +63,10 @@ const Reviews = () => {
   return (
     <div className="w-full bg-gray-100">
       <div className="max-w-[1240px] mx-auto my-auto p-6  rounded-md  py-16 px-4">
-        <h2 className="text-2xl font-bold text-center text-black">
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-black mb-4">
           What Our Customers Are Saying
         </h2>
-        <h3 className="text-lg font-bold text-center mb-6 text-gray-500">
+        <h3 className="text-base md:text-lg  font-bold text-center mb-6 text-gray-700">
           "Delighting taste buds with coffee, treats, and sweet moments - hear
           it from those who love us!"
         </h3>

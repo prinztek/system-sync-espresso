@@ -23,11 +23,13 @@ const ProductCard = ({ product, handleAddToCart }) => {
       className="max-w-sm rounded-lg overflow-hidden shadow-md bg-white hover:shadow-xl border border-gray-200"
     >
       {/* Product Image */}
-      <img
-        className="w-full h-64 object-cover rounded-t-lg"
-        src={product.image_url}
-        alt={product.name}
-      />
+      <div className="relative w-full h-64 overflow-hidden">
+        <img
+          className="w-full h-full object-scale-down rounded-t-lg"
+          src={product.image_url}
+          alt={product.name}
+        />
+      </div>
 
       {/* Product Details */}
       <div className="p-6">

@@ -43,10 +43,13 @@ const Footer = () => {
               <a href="menu">Menu</a>
             </li>
             <li className="text-sm pt-2">
-              <a href="contact-us">Contact</a>
+              <a href="contact">Contact</a>
             </li>
             <li className="text-sm pt-2">
-              <a href="franchise">Franchise</a>
+              <a href="signin">Sign In</a>
+            </li>
+            <li className="text-sm pt-2">
+              <a href="signup">Sign Up</a>
             </li>
           </ul>
         </div>

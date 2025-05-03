@@ -1,4 +1,4 @@
-const Newsletter = () => {
+const Newsletter = ({ newsLetterEmail, setNewsLetterEmail, submitEmail }) => {
   return (
     <div
       className="w-full bg-cover bg-center"
@@ -21,9 +21,14 @@ const Newsletter = () => {
           <input
             type="email"
             placeholder="Enter your email"
+            value={newsLetterEmail}
+            onChange={(e) => setNewsLetterEmail(e.target.value)}
             className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-900"
           />
-          <button className="w-full md:w-auto px-6 py-2 bg-brown-600 text-white  font-semibold rounded-md hover:bg-brown-700 bg-orange-500 hover:bg-orange-600 ease-in-out">
+          <button
+            onClick={submitEmail}
+            className="w-full md:w-auto px-6 py-2 bg-brown-600 text-white  font-semibold rounded-md hover:bg-brown-700 bg-orange-500 hover:bg-orange-600 ease-in-out"
+          >
             SUBSCRIBE
           </button>
         </div>

@@ -26,8 +26,8 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col mt-[90px]">
-      <div className="max-w-[1240px] mx-auto px-6 py-8">
+    <div className="min-h-screen">
+      <div className="max-w-[1240px] mt-[90px] mx-auto my-auto rounded-md py-16 px-4">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
           Contact Us
         </h1>
@@ -39,9 +39,15 @@ const Contact = () => {
             <p>We will get back to you shortly.</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6 max-w-lg mx-auto px-4 py-6 bg-white"
+          >
             <div className="form-group">
-              <label htmlFor="name" className="block text-gray-700 font-medium">
+              <label
+                htmlFor="name"
+                className="block text-gray-700 font-semibold mb-2"
+              >
                 Name:
               </label>
               <input
@@ -51,14 +57,14 @@ const Contact = () => {
                 value={formData?.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
 
             <div className="form-group">
               <label
                 htmlFor="email"
-                className="block text-gray-700 font-medium"
+                className="block text-gray-700 font-semibold mb-2"
               >
                 Email:
               </label>
@@ -69,14 +75,14 @@ const Contact = () => {
                 value={formData?.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
 
             <div className="form-group">
               <label
                 htmlFor="message"
-                className="block text-gray-700 font-medium"
+                className="block text-gray-700 font-semibold mb-2"
               >
                 Message:
               </label>
@@ -86,13 +92,14 @@ const Contact = () => {
                 value={formData?.message}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                rows="4"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               ></textarea>
             </div>
 
             <button
               type="submit"
-              className="w-full py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full py-3 bg-amber-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               Submit
             </button>

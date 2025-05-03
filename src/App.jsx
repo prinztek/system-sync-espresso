@@ -11,10 +11,29 @@ import About from "./pages/About";
 import Footer from "./components/Footer";
 import PageNotFound from "./pages/PageNotFound";
 import Franchise from "./pages/Franchise";
+import { ToastContainer, toast } from "react-toastify";
 
 const defaultUserObject = { email: "", password: "", cart: [] };
 
 function App() {
+  const [newsLetterEmail, setNewsLetterEmail] = useState("");
+  const notify = (text, type) => {
+    toast[type](text);
+  };
+
+  const submitEmail = () => {
+    if (!newsLetterEmail.trim()) {
+      notify("Please enter a valid email address.", "error");
+      return;
+    }
+
+    notify(
+      "Thank you for subscribing to our newsletter! Stay tuned for updates.",
+      "success"
+    );
+    setNewsLetterEmail(""); // Clear input field after successful submission
+  };
+
   const navigate = useNavigate(); // to redirect user
   const [user, setUser] = useState(() => {
     const savedEmail = localStorage.getItem("loggedInUserEmail");
@@ -34,7 +53,7 @@ function App() {
 
       localStorage.setItem(user.email, JSON.stringify(user)); // Update localStorage
     }
-  }, [user]);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,12 +71,32 @@ function App() {
   const handleSignup = (e) => {
     e.preventDefault();
     if (user.password !== confirmPassword) {
-      alert("Passwords do not match!");
+      notify("Passwords do not match!", "warn");
+
+      return;
+    }
+    // Check if the email is already in use
+    const existingUser = localStorage.getItem(user.email);
+    if (existingUser) {
+      notify(
+        "This email is already registered. Try Logging in instead.",
+        "warn"
+      );
       return;
     }
 
+    // Save the user to localStorage
     localStorage.setItem(user.email, JSON.stringify(user));
-    setConfirmPassword(""); // Clear confirm password
+    notify("Account created successfully!", "success");
+
+    setConfirmPassword(""); // Clear confirm password field
+
+    // log in the user after successful signup
+    setIsLoggedIn(true);
+    setUser(user);
+    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("loggedInUserEmail", user.email);
+
     navigate("/"); // Redirect to Home
   };
 
@@ -66,12 +105,14 @@ function App() {
     const savedUser = localStorage.getItem(user.email);
 
     if (!savedUser) {
-      alert("Account does not exist!");
+      notify("Account does not exist!", "warn");
       return;
     }
 
     const retrievedUser = JSON.parse(savedUser);
     if (user.password === retrievedUser.password) {
+      notify("Logged in successfully", "success");
+
       setIsLoggedIn(true);
       setUser(retrievedUser);
       localStorage.setItem("loggedIn", "true");
@@ -84,6 +125,7 @@ function App() {
   };
 
   const handleLogout = () => {
+    notify("Logged out successfully", "success");
     setUser(defaultUserObject);
     setIsLoggedIn(false);
     localStorage.removeItem("loggedInUserEmail");
@@ -93,7 +135,7 @@ function App() {
 
   const handleAddToCart = (product, size, price) => {
     if (!isLoggedIn) {
-      alert("Create an account first");
+      notify("Create an account first", "info");
       navigate("/signin");
       return;
     }
@@ -104,13 +146,15 @@ function App() {
 
     let updatedCart;
     if (existingProduct) {
-      console.log("product already added to cart"); // add 1 to quantity
+      notify("Product already added to cart, added 1 to quantity", "success");
+      console.log("Product already added to cart"); // add 1 to quantity
       updatedCart = user.cart.map((item) =>
         item.id === existingProduct.id
           ? { ...item, quantity: item.quantity + 1 }
           : item
       );
     } else {
+      notify("Product added to cart", "success");
       console.log("product added to cart");
       updatedCart = [
         ...user.cart,
@@ -119,17 +163,17 @@ function App() {
     }
     const updatedUser = { ...user, cart: updatedCart };
     setUser(updatedUser);
-    // localStorage.setItem(user.email, JSON.stringify(updatedUser)); // Update localStorage
+    localStorage.setItem(user.email, JSON.stringify(updatedUser)); // Update localStorage
   };
 
   const handleRemoveFromCart = (id, size) => {
+    notify("Product removed from cart", "success");
     const updatedCart = user.cart.filter(
       (item) => !(item.id === id && item.size_options === size)
     );
     const updatedUser = { ...user, cart: updatedCart };
     setUser(updatedUser);
-
-    return updatedCart;
+    localStorage.setItem(user.email, JSON.stringify(updatedUser)); // Update localStorage
   };
 
   const handleQuantityChange = (id, quantity, size) => {
@@ -141,6 +185,7 @@ function App() {
 
     const updatedUser = { ...user, cart: updatedCart };
     setUser(updatedUser);
+    localStorage.setItem(user.email, JSON.stringify(updatedUser)); // Update localStorage
   };
 
   // Handle Navbar and Footer visibility
@@ -159,7 +204,17 @@ function App() {
         />
       )}
       <Routes>
-        <Route path="/" element={<Home handleAddToCart={handleAddToCart} />} />
+        <Route
+          path="/"
+          element={
+            <Home
+              handleAddToCart={handleAddToCart}
+              submitEmail={submitEmail}
+              newsLetterEmail={newsLetterEmail}
+              setNewsLetterEmail={setNewsLetterEmail}
+            />
+          }
+        />
         <Route path="franchise" element={<Franchise />} />
         <Route
           path="/menu"
@@ -202,6 +257,7 @@ function App() {
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       {!hideNavbarFooter && <Footer />}
+      <ToastContainer />
     </div>
   );
 }

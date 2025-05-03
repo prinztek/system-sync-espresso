@@ -16,14 +16,14 @@ const Signin = ({ handleLogin, setAuthCredentials, handleInputChange }) => {
           </span>
         </NavLink>
       </div>
-      <div className="bg-white shadow-md rounded-md">
+      <div className="bg-white shadow-md rounded-md border">
         {/* Navigation Bar for Signin and Signup */}
         <nav className="border-b w-full text-black mb-4">
           <ul className="flex justify-around items-center text-center px-2 pt-4 pb-3">
             <li className="w-full">
               <NavLink
                 to="/signup"
-                className={({ isActive }) => (isActive ? "text-red-500" : "")}
+                className={({ isActive }) => (isActive ? "text-amber-600" : "")}
               >
                 Sign Up
               </NavLink>
@@ -31,7 +31,7 @@ const Signin = ({ handleLogin, setAuthCredentials, handleInputChange }) => {
             <li className="w-full">
               <NavLink
                 to="/signin"
-                className={({ isActive }) => (isActive ? "text-red-500" : "")}
+                className={({ isActive }) => (isActive ? "text-amber-600" : "")}
               >
                 Sign In
               </NavLink>
@@ -45,7 +45,7 @@ const Signin = ({ handleLogin, setAuthCredentials, handleInputChange }) => {
               name="email"
               placeholder="Email"
               value={user.email}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-700"
               onChange={handleInputChange}
             />
           </div>
@@ -56,12 +56,12 @@ const Signin = ({ handleLogin, setAuthCredentials, handleInputChange }) => {
               placeholder="Password"
               value={user.password}
               onChange={handleInputChange}
-              className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-700"
             />
           </div>
           <button
             onClick={handleLogin}
-            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full bg-amber-600 text-white p-3 rounded-md hover:bg-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-700"
           >
             Sign In
           </button>

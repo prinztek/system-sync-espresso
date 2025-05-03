@@ -8,17 +8,17 @@ const CoffeeFeatures = () => {
       description: "Fresh coffee beans delivered straight to your doorstep.",
     },
     {
-      icon: "⏰", // Replace with a coffee-related icon/image
+      icon: "⏰",
       title: "24/7 Service",
       description: "Order your favorite coffee anytime, anywhere.",
     },
     {
-      icon: "🎉", // Replace with a coffee-related icon/image
+      icon: "🎉",
       title: "Exclusive Deals",
       description: "Enjoy special discounts on your favorite coffee blends.",
     },
     {
-      icon: "💳", // Replace with a coffee-related icon/image
+      icon: "💳",
       title: "Easy Payments",
       description:
         "We accept most payment methods, including GCash, PayMaya, Paypal.",
@@ -26,7 +26,7 @@ const CoffeeFeatures = () => {
   ];
 
   return (
-    <div className="container max-w-[1240px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-4 md:p-8">
+    <div className="container max-w-[1240px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-4 md:p-8">
       {features.map((feature, index) => (
         <div
           key={index}
