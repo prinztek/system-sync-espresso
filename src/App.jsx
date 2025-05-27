@@ -16,6 +16,7 @@ import { ToastContainer, toast } from "react-toastify";
 const defaultUserObject = { email: "", password: "", cart: [] };
 
 function App() {
+  // for newsletter subscription
   const [newsLetterEmail, setNewsLetterEmail] = useState("");
   const notify = (text, type) => {
     toast[type](text);
