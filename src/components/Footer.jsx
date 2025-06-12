@@ -51,6 +51,14 @@ const Footer = () => {
             <li className="text-sm pt-2">
               <a href="signup">Sign Up</a>
             </li>
+            <li className="text-sm pt-2">
+              <a
+                href="/admin-signin"
+                className="text-amber-600 hover:underline"
+              >
+                Admin account?
+              </a>
+            </li>
           </ul>
         </div>
         <div>

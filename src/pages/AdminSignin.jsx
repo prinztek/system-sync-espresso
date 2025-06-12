@@ -1,31 +1,40 @@
 import { NavLink } from "react-router-dom";
-import { loginAPI, signupAPI } from "../services/AuthService";
+import { useAuth } from "../context/UseAuth";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-const AdminSignin = ({ setAuthCredentials, handleInputChange }) => {
-  const [user, setUser] = setAuthCredentials;
+const AdminSignin = () => {
+  const { loginUser } = useAuth();
+  const [userCredentials, setUserCredentials] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleLogin = (e) => {
+  const notify = (text, type) => {
+    toast[type](text);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUserCredentials((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleAdminSignIn = async (e) => {
     e.preventDefault();
-    const savedUser = localStorage.getItem(user.email);
 
-    if (!savedUser) {
-      notify("Account does not exist!", "warn");
+    if (!userCredentials.email || !userCredentials.password) {
+      notify("Please fill in both email and password.", "error");
       return;
     }
 
-    const retrievedUser = JSON.parse(savedUser);
-    if (user.password === retrievedUser.password) {
-      notify("Logged in successfully", "success");
-
-      setIsLoggedIn(true);
-      setUser(retrievedUser);
-      localStorage.setItem("loggedIn", "true");
-      localStorage.setItem("loggedInUserEmail", user.email);
-      navigate("/"); // Redirect to Home
-      return;
+    try {
+      await loginUser(userCredentials.email, userCredentials.password, true);
+    } catch (e) {
+      console.error(e);
     }
-
-    alert("The password you've entered is incorrect.");
   };
 
   return (
@@ -48,7 +57,6 @@ const AdminSignin = ({ setAuthCredentials, handleInputChange }) => {
               type="email"
               name="email"
               placeholder="Email"
-              value={user.email}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-700"
               onChange={handleInputChange}
             />
@@ -58,13 +66,12 @@ const AdminSignin = ({ setAuthCredentials, handleInputChange }) => {
               type="password"
               name="password"
               placeholder="Password"
-              value={user.password}
               onChange={handleInputChange}
               className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-700"
             />
           </div>
           <button
-            onClick={handleLogin}
+            onClick={handleAdminSignIn}
             className="w-full bg-amber-600 text-white p-3 rounded-md hover:bg-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-700"
           >
             Sign In

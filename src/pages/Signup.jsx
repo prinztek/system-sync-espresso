@@ -1,8 +1,58 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/UseAuth";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
-const Signup = ({ handleSignup, setAuthCredentials, handleInputChange }) => {
-  const [user, setUser, confirmPassword, setConfirmPassword] =
-    setAuthCredentials;
+const Signup = () => {
+  const navigate = useNavigate(); // to redirect user
+  const { signUpUser, setUser } = useAuth();
+  const [newUserCredentials, setNewUserCredentials] = useState({
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const notify = (text, type) => {
+    toast[type](text);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewUserCredentials((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  function validatePasswords() {
+    if (newUserCredentials.password !== newUserCredentials.confirmPassword) {
+      alert("password does not match");
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    if (!validatePasswords()) {
+      notify("Passwords do not match!", "warn");
+      return;
+    }
+
+    try {
+      // Call the signup API and wait for the response
+      const response = await signUpUser(
+        newUserCredentials.username,
+        newUserCredentials.email,
+        newUserCredentials.password
+      );
+    } catch (error) {
+      // Handle any errors from the API call
+      console.error(error); // For debugging
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center">
@@ -43,10 +93,18 @@ const Signup = ({ handleSignup, setAuthCredentials, handleInputChange }) => {
         <form className="px-5 pt-3 pb-8">
           <div className="mb-4">
             <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-700"
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4">
+            <input
               type="email"
               name="email"
               placeholder="Email"
-              value={user.email}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-700"
               onChange={handleInputChange}
             />
@@ -57,7 +115,6 @@ const Signup = ({ handleSignup, setAuthCredentials, handleInputChange }) => {
               name="password"
               placeholder="Password"
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-700"
-              value={user.password}
               onChange={handleInputChange}
             />
           </div>
@@ -67,12 +124,11 @@ const Signup = ({ handleSignup, setAuthCredentials, handleInputChange }) => {
               name="confirmPassword"
               placeholder="Confirm Password"
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-700"
-              value={confirmPassword}
               onChange={handleInputChange}
             />
           </div>
           <button
-            onClick={handleSignup}
+            onClick={handleSignUp}
             className="w-full bg-amber-600 text-white p-3 rounded-md hover:bg-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-700"
           >
             Create New Account

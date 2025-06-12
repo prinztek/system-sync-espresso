@@ -1,4 +1,26 @@
-const Newsletter = ({ newsLetterEmail, setNewsLetterEmail, submitEmail }) => {
+import { useState } from "react";
+import { toast } from "react-toastify";
+
+const Newsletter = () => {
+  const notify = (text, type) => {
+    toast[type](text);
+  };
+  // for newsletter subscription
+  const [newsLetterEmail, setNewsLetterEmail] = useState("");
+
+  const submitNewsletterEmail = () => {
+    if (!newsLetterEmail.trim()) {
+      notify("Please enter a valid email address.", "error");
+      return;
+    }
+
+    notify(
+      "Thank you for subscribing to our newsletter! Stay tuned for updates.",
+      "success"
+    );
+    setNewsLetterEmail(""); // Clear input field after successful submission
+  };
+
   return (
     <div
       className="w-full bg-cover bg-center"
@@ -26,7 +48,7 @@ const Newsletter = ({ newsLetterEmail, setNewsLetterEmail, submitEmail }) => {
             className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-900"
           />
           <button
-            onClick={submitEmail}
+            onClick={submitNewsletterEmail}
             className="w-full md:w-auto px-6 py-2 bg-brown-600 text-white  font-semibold rounded-md hover:bg-brown-700 bg-orange-500 hover:bg-orange-600 ease-in-out"
           >
             SUBSCRIBE

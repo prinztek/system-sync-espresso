@@ -1,31 +1,50 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginAPI, logoutAPI, signupAPI } from "../services/AuthService";
+import {
+  loginAPI,
+  logoutAPI,
+  signupAPI,
+  checkSession,
+} from "../services/AuthService";
+import { toast } from "react-toastify";
 
 export const UserContext = createContext();
 
-const defaultUserObject = {
-  id: "",
-  username: "",
-  email: "",
-  created_at: "",
-};
-
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(defaultUserObject);
+  const [user, setUser] = useState(null);
   const [isReady, setIsReady] = useState(false);
+  const isAdmin = user?.role === "admin";
+  const isUser = user?.role === "user";
+
+  const notify = (text, type) => {
+    toast[type](text);
+  };
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      setUser(JSON.parse(user));
-    }
+    const verifySession = async () => {
+      try {
+        const response = await checkSession(); // Make an API call to check session status
 
-    setIsReady(true);
-  }, []);
+        if (response.status === "success") {
+          // If session is valid, set the user state from the backend response
+          setUser(response.user);
+        } else {
+          // If session is invalid or doesn't exist, reset the user state
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Error checking session:", error);
+        setUser(null); // Handle error and reset user state
+      }
 
-  const signUpUser = async () => {
+      setIsReady(true); // Mark the app as ready after the session check
+    };
+
+    verifySession(); // Call the session verification function
+  }, []); // Empty dependency array ensures this only runs on component mount
+
+  const signUpUser = async (email, username, password) => {
     try {
       const res = await signupAPI(email, username, password);
 
@@ -38,33 +57,40 @@ export const UserProvider = ({ children }) => {
         };
 
         setUser(userObject);
-        console.log("Registration Success!");
-
+        notify("Signup successful!", "success");
         navigate("/");
       }
     } catch (e) {
       console.error(e);
+      notify("Signup failed. Please try again.", "error");
     }
   };
 
-  const loginUser = async () => {
+  const loginUser = async (email, password, isAdmin = false) => {
     try {
-      const response = await loginAPI(email, password);
+      const response = await loginAPI(email, password, isAdmin);
 
       if (response.status === "success") {
         const userObject = {
-          id: response.user.user_id,
+          user_id: response.user.user_id,
           username: response.user.username,
           email: response.user.email,
           created_at: response.user.created_at,
+          role: response.user.role, // <== IMPORTANT
         };
 
         setUser(userObject);
-        console.log("Login Success!");
-        navigate("/");
+        notify("Login successful!", "success");
+
+        if (isAdmin) {
+          navigate("/admin-dashboard"); // Redirect to admin dashboard if admin
+        } else {
+          navigate("/");
+        }
       }
     } catch (e) {
       console.error(e);
+      notify("Login failed. Please check your credentials.", "error");
     }
   };
 
@@ -76,7 +102,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const logout = async () => {
+  const logoutUser = async () => {
     try {
       const response = await logoutAPI();
       if (response.status === "success") {
@@ -84,17 +110,26 @@ export const UserProvider = ({ children }) => {
         notify("Logout successful!", "success");
         navigate("/"); // Redirect to home page or dashboard
       } else {
-        notify("Logout unsuccessful. Please try again.", "error");
+        console.error("Logout failed:", response.message);
       }
     } catch (e) {
       console.error(e);
+      notify("Logout failed. Please try again.", "error");
     }
   };
 
   return (
     <UserContext.Provider
       // value={{ registerUser, loginUser, user, logout, isLoggedIn }}
-      value={{ loginUser, user, logout, isLoggedIn, signUpUser }}
+      value={{
+        user,
+        loginUser,
+        logoutUser,
+        isLoggedIn,
+        signUpUser,
+        isAdmin,
+        isUser,
+      }}
     >
       {isReady ? children : null}
     </UserContext.Provider>

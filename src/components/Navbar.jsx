@@ -1,10 +1,14 @@
 import { MenuIcon, XIcon, ShoppingCartIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
+import { useAuth } from "../context/UseAuth";
+import { useCart } from "../context/useCart";
 
-const Navbar = ({ isLoggedIn, handleLogout, setAuthCredentials, cart }) => {
+const Navbar = () => {
+  const { isLoggedIn, logoutUser } = useAuth();
+  const { cartItems } = useCart();
   const [nav, setNav] = useState(false);
-  const [email] = setAuthCredentials;
+
   const handleClick = () => setNav(!nav);
 
   const handleClose = () => {
@@ -65,8 +69,8 @@ const Navbar = ({ isLoggedIn, handleLogout, setAuthCredentials, cart }) => {
                 </NavLink>
               </li>
               <li className="px-6">
-                {isLoggedIn ? (
-                  <button onClick={handleLogout}>Logout</button>
+                {isLoggedIn() ? (
+                  <button onClick={logoutUser}>Logout</button>
                 ) : (
                   <NavLink to="/signin">Sign In</NavLink>
                 )}
@@ -76,7 +80,7 @@ const Navbar = ({ isLoggedIn, handleLogout, setAuthCredentials, cart }) => {
           <Link to={"/cart"}>
             <div className="hidden md:flex justify-around items-center  rounded-lg bg-black border-2 border-white  px-5 py-1">
               <ShoppingCartIcon className="w-6  text-white cursor-pointer" />
-              <span className="text-white ml-3">{cart.length}</span>
+              <span className="text-white ml-3">{cartItems?.length}</span>
             </div>
           </Link>
           <div className="md:hidden" onClick={handleClick}>
@@ -110,8 +114,8 @@ const Navbar = ({ isLoggedIn, handleLogout, setAuthCredentials, cart }) => {
             </NavLink>
           </li>
           <li className="w-full my-4 border-b">
-            {isLoggedIn ? (
-              <button onClick={handleLogout} className="text-left">
+            {isLoggedIn() ? (
+              <button onClick={logoutUser} className="text-left">
                 Logout
               </button>
             ) : (
@@ -124,7 +128,7 @@ const Navbar = ({ isLoggedIn, handleLogout, setAuthCredentials, cart }) => {
             <NavLink to="/cart" onClick={handleClose}>
               <div className="flex items-center space-x-2">
                 <ShoppingCartIcon className="w-6" aria-label="Shopping Cart" />
-                <span>{cart.length}</span>
+                <span>{cartItems?.length}</span>
               </div>
             </NavLink>
           </li>

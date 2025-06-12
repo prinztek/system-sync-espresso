@@ -1,31 +1,55 @@
+import { useCart } from "../context/useCart";
+import { useAuth } from "../context/UseAuth";
 import CartItems from "../components/CartItems";
-import OrderSummary from "../components/OrderSummary";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Cart({ user, cart, handleRemoveFromCart, handleQuantityChange }) {
-  // console.log(user);
+function Cart({ products }) {
+  const { isLoggedIn, user } = useAuth();
+  const { cartItems, updateItemQuantity, removeItem } = useCart();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("Cart component mounted or updated");
+    // You can add any additional logic here if needed
+    console.log("Cart items:", cartItems);
+    console.log("Cart items:", user);
+  }, []);
+
+  function handleCheckout() {
+    if (!isLoggedIn()) {
+      navigate("/signin");
+    } else {
+      // Proceed to checkout logic
+      console.log("Proceeding to checkout with items:", cartItems);
+      navigate("/checkout");
+      // You can redirect to a checkout page or handle the checkout process here
+    }
+  }
 
   return (
     <div className="mt-[90px]">
       <div className="max-w-[1240px] mx-auto min-h-screen flex flex-col px-4 py-16">
-        {user.email ? (
+        {isLoggedIn() ? (
           <h1 className="text-lg font-medium mb-4">{user.email}'s Cart</h1>
-        ) : (
-          ""
-        )}
-        {!cart.length ? (
+        ) : null}
+        {!cartItems?.length ? (
           <div className="text-gray-500">No items added</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="col-span-2">
+            <div className="col-span-3">
               <CartItems
-                cart={cart}
-                handleRemoveFromCart={handleRemoveFromCart}
-                handleQuantityChange={handleQuantityChange}
+                cart={cartItems}
+                products={products}
+                handleRemoveFromCart={removeItem}
+                handleQuantityChange={updateItemQuantity}
               />
-            </div>
-            {/* Cart Items */}
-            <div className="col-span-2 md:col-span-1">
-              <OrderSummary cart={cart} /> {/* Order Summary */}
+              <button
+                onClick={handleCheckout}
+                className="w-full py-2 bg-amber-600 text-white rounded hover:bg-orange-700 my-5"
+              >
+                Proceed to Checkout
+              </button>
             </div>
           </div>
         )}

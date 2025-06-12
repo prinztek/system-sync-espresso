@@ -1,20 +1,24 @@
 import { useState } from "react";
+import { useAuth } from "../context/UseAuth"; // Assuming you have a useAuth hook for authentication context
 
 const ProductCard = ({ product, handleAddToCart }) => {
-  const [selectedSize, setSelectedSize] = useState(
-    product.size_options[0].toLowerCase()
-  );
-  const [selectedPrice, setSelectedPrice] = useState(
-    product.price[product.size_options[0].toLowerCase()]
-  );
+  const { user } = useAuth(); // Assuming useAuth provides user context
+  const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
 
   const handleChange = (e) => {
-    const size = e.target.value;
-    setSelectedSize(size);
+    const sizeId = parseInt(e.target.value);
+    const size = product.sizes.find((s) => s.id === sizeId);
+    if (size) setSelectedSize(size);
+  };
 
-    // Use the price object with the size as the key
-    const price = product.price[size.toLowerCase()] || 0;
-    setSelectedPrice(price);
+  const handleAddItemToCart = (product, sizeId, quantity) => {
+    if (!user) {
+      // If user is not logged in, show a message or redirect to login
+      alert("Please log in to add items to your cart.");
+      return;
+    }
+    // If user is logged in, proceed with adding to cart
+    handleAddToCart(product, sizeId, quantity);
   };
 
   return (
@@ -39,30 +43,36 @@ const ProductCard = ({ product, handleAddToCart }) => {
         <p className="text-gray-600 text-sm mb-4">{product.description}</p>
 
         <div className="mt-4">
-          {/* Pricing varies based on the selected option (dropdown) */}
           {product.type === "Drink" ? (
             <div className="flex items-center space-x-4 text-sm text-gray-800">
               <select
                 id={product.name + product.id}
-                value={selectedSize}
+                value={selectedSize.id}
                 onChange={handleChange}
                 className="border border-gray-300 rounded-md p-2 text-gray-800 focus:ring-2 focus:ring-neutral-950 focus:outline-none"
               >
-                {product.size_options.map((option, index) => (
-                  <option key={index} value={option.toLowerCase()}>
-                    {option}
+                {product.sizes.map((size) => (
+                  <option key={size.id} value={size.id}>
+                    {size.name}
                   </option>
                 ))}
               </select>
-              <p className="font-medium">Price: ${selectedPrice}</p>
+              <p className="font-medium">Price: ${selectedSize.price}</p>
             </div>
           ) : (
-            <p className="font-medium text-black">Price: ${selectedPrice}</p>
+            <p className="font-medium text-black">
+              Price: ${selectedSize.price}
+            </p>
           )}
+
           <div className="flex justify-between mt-6 space-x-4 text-xs sm:text-sm">
             <button
               onClick={() =>
-                handleAddToCart(product, selectedSize, selectedPrice)
+                handleAddItemToCart(
+                  product, // ✅ full product object
+                  selectedSize.id, // ✅ size ID only
+                  1 // ✅ quantity
+                )
               }
               className="inline-flex h-12 items-center justify-center w-1/2 rounded-md bg-neutral-950 px-6 font-medium text-neutral-50 shadow-md hover:bg-neutral-900 hover:shadow-lg active:scale-95 transition-transform"
             >

@@ -6,19 +6,19 @@ function About() {
       imageUrl: "src/assets/about_images/about_image_1.png",
       title: "The Early Days 2021",
       description:
-        "The first System Sync Espresso opened its doors in a modest, tech-inspired space in [City]. The shop was designed to stand out, with a unique blend of industrial design, high-speed Wi-Fi, and a carefully curated coffee menu. Drinks like the “Java Jolt” and “Espresso.exe” quickly gained a loyal following, attracting tech workers, students, and coffee aficionados.",
+        "The first System Sync Espresso opened its doors in a modest, tech-inspired space in the city. The shop was designed to stand out, with a unique blend of industrial design, high-speed Wi-Fi, and a carefully curated coffee menu. Drinks like the “Java Jolt” and “Espresso.exe” quickly gained a loyal following, attracting tech workers, students, and coffee aficionados.",
     },
     {
       imageUrl: "src/assets/about_images/about_image_2.png",
       title: "Rapid Growth & Innovation 2022",
       description:
-        "As the shop grew in popularity, so did its ambitions. By [Year], System Sync Espresso introduced its first proprietary app, allowing customers to, earn rewards, and order ahead. The app’s sleek design mirrored the brand’s ethos—effortless and efficient.",
+        "As the shop grew in popularity, so did its ambitions. By 2022, System Sync Espresso introduced its first proprietary app, allowing customers to earn rewards and order ahead. The app’s sleek design mirrored the brand’s ethos—effortless and efficient.",
     },
     {
       imageUrl: "src/assets/about_images/about_image_3.png",
       title: "Becoming a Community Icon 2023",
       description:
-        "By [Year], System Sync Espresso had expanded to multiple locations, each maintaining the same high standards of quality and atmosphere. Beyond its coffee, the brand became synonymous with community, hosting events like coding workshops, open mic nights, and “Hack & Sip” hackathons.",
+        "By 2023, System Sync Espresso had expanded to multiple locations, each maintaining the same high standards of quality and atmosphere. Beyond its coffee, the brand became synonymous with community, hosting events like coding workshops, open mic nights, and “Hack & Sip” hackathons.",
     },
     {
       imageUrl: "src/assets/about_images/about_image_4.jpg",
@@ -42,7 +42,7 @@ function About() {
           moments of pause and connection.
         </p>
         {aboutContent.map((about, index) => (
-          <AboutContent about={about} index={index} />
+          <AboutContent about={about} index={index} key={index} />
         ))}
       </div>
     </div>

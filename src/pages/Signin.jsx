@@ -1,7 +1,41 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "../context/UseAuth";
+import { toast } from "react-toastify";
 
-const Signin = ({ handleLogin, setAuthCredentials, handleInputChange }) => {
-  const [user, setUser] = setAuthCredentials;
+const Signin = () => {
+  const { loginUser } = useAuth();
+  const [userCredentials, setUserCredentials] = useState({
+    email: "",
+    password: "",
+  });
+
+  const notify = (text, type) => {
+    toast[type](text);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUserCredentials((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+
+    if (!userCredentials.email || !userCredentials.password) {
+      notify("Please fill in both email and password.", "error");
+      return;
+    }
+
+    try {
+      await loginUser(userCredentials.email, userCredentials.password, false);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center">
@@ -44,7 +78,6 @@ const Signin = ({ handleLogin, setAuthCredentials, handleInputChange }) => {
               type="email"
               name="email"
               placeholder="Email"
-              value={user.email}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-700"
               onChange={handleInputChange}
             />
@@ -54,13 +87,12 @@ const Signin = ({ handleLogin, setAuthCredentials, handleInputChange }) => {
               type="password"
               name="password"
               placeholder="Password"
-              value={user.password}
               onChange={handleInputChange}
               className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-700"
             />
           </div>
           <button
-            onClick={handleLogin}
+            onClick={handleSignIn}
             className="w-full bg-amber-600 text-white p-3 rounded-md hover:bg-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-700"
           >
             Sign In

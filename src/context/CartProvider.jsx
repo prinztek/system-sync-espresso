@@ -1,56 +1,55 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
+import {
+  getCart,
+  addToCart,
+  updateQuantity,
+  removeFromCart,
+} from "../services/CartService";
 
-const CartContext = createContext();
+export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState(() => {
-    // Try to load cart from localStorage or start empty
-    const saved = localStorage.getItem("cart");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
+    // Load cart from PHP session
+    const fetchCart = async () => {
+      const cart = await getCart();
+      setCartItems(cart);
+    };
 
-  const addToCart = (product, quantity = 1) => {
-    setCartItems((prevItems) => {
-      const itemIndex = prevItems.findIndex((item) => item.id === product.id);
-      if (itemIndex > -1) {
-        // update quantity
-        const updatedItems = [...prevItems];
-        updatedItems[itemIndex].quantity += quantity;
-        return updatedItems;
-      }
-      // add new item
-      return [...prevItems, { ...product, quantity }];
-    });
+    fetchCart();
+  }, []);
+
+  const addItem = async (product, size, quantity = 1) => {
+    // console.log(product);
+    // console.log(size);
+    // console.log(quantity);
+
+    await addToCart(product, size, quantity);
+    const updatedCart = await getCart();
+    setCartItems(updatedCart);
   };
 
-  const updateQuantity = (productId, quantity) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === productId ? { ...item, quantity } : item
-      )
-    );
+  const updateItemQuantity = async (productId, size, quantity) => {
+    await updateQuantity(productId, size, quantity);
+    const updatedCart = await getCart();
+    setCartItems(updatedCart);
   };
 
-  const removeFromCart = (productId) => {
-    setCartItems((prevItems) =>
-      prevItems.filter((item) => item.id !== productId)
-    );
+  const removeItem = async (productId, size) => {
+    await removeFromCart(productId, size);
+    const updatedCart = await getCart();
+    setCartItems(updatedCart);
   };
-
-  const clearCart = () => setCartItems([]);
 
   return (
     <CartContext.Provider
       value={{
         cartItems,
-        addToCart,
-        updateQuantity,
-        removeFromCart,
-        clearCart,
+        addItem,
+        updateItemQuantity,
+        removeItem,
       }}
     >
       {children}
