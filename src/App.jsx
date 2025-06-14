@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import Menu from "./pages/Menu";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Cart from "./pages/Cart";
 import Navbar from "./components/Navbar";
 import Contact from "./pages/Contact";
@@ -15,6 +15,7 @@ import AdminSignin from "./pages/AdminSignin";
 import { ToastContainer, toast } from "react-toastify";
 import Checkout from "./pages/Checkout";
 import AdminDashboard from "./pages/AdminDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const [serverProducts, setServerProducts] = useState([]);
@@ -75,7 +76,16 @@ function App() {
         />
         <Route path="/cart" element={<Cart products={serverProducts} />} />
         <Route path="/admin-signin" element={<AdminSignin />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       {!hideNavbarFooter && <Footer />}
