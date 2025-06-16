@@ -60,3 +60,15 @@ export const removeFromCart = async (productId, sizeId) => {
     console.error("Error removing from cart:", error);
   }
 };
+
+export const clearCart = async () => {
+  try {
+    const response = await fetch(`${api}/cart.php`, {
+      method: "DELETE",
+      credentials: "include", // ✅ This is necessary
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error clearing cart:", error);
+  }
+};

@@ -2,7 +2,7 @@ import { useCart } from "../context/useCart";
 import { useAuth } from "../context/UseAuth";
 import CartItems from "../components/CartItems";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Cart({ products }) {
   const { isLoggedIn, user } = useAuth();
@@ -31,7 +31,15 @@ function Cart({ products }) {
     <div className="mt-[90px]">
       <div className="max-w-[1240px] mx-auto min-h-screen flex flex-col px-4 py-16">
         {isLoggedIn() ? (
-          <h1 className="text-lg font-medium mb-4">{user.email}'s Cart</h1>
+          <div className="mt-6 text-right">
+            <Link
+              to="/order-history"
+              className="text-blue-600 hover:underline text-sm"
+            >
+              View Order History →
+            </Link>
+            <h1 className="text-lg font-medium mb-4">{user.email}'s Cart</h1>
+          </div>
         ) : null}
         {!cartItems?.length ? (
           <div className="text-gray-500">No items added</div>

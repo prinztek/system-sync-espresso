@@ -3,12 +3,20 @@ import { useCart } from "../context/useCart";
 import OrderSummary from "../components/OrderSummary";
 import { useAuth } from "../context/UseAuth";
 import { useNavigate } from "react-router-dom";
+import ConfirmationCard from "../components/ConfirmationCard";
 
 function Checkout({ products }) {
   const navigate = useNavigate();
-  const { cartItems } = useCart();
+  const { cartItems, clearCartItems } = useCart();
   const { user } = useAuth();
-  const [step, setStep] = useState(1);
+
+  const [orderSummary, setOrderSummary] = useState({
+    id: "",
+    name: "",
+    address: "",
+    total_price: 0,
+    cartItems: [],
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -17,24 +25,15 @@ function Checkout({ products }) {
 
   const [submitted, setSubmitted] = useState(false);
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  // optional - grab the user details from the last order
 
-  // Redirect to login if user not authenticated
   useEffect(() => {
     if (!user) {
       navigate("/login");
+    } else if (cartItems.length === 0 && !submitted) {
+      navigate("/menu");
     }
-  }, [user, navigate]);
-
-  // Redirect to home if cart is empty
-  useEffect(() => {
-    if (cartItems.length === 0) {
-      navigate("/");
-    }
-  }, [cartItems, navigate]);
+  }, [user, cartItems, navigate, submitted]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -43,77 +42,84 @@ function Checkout({ products }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Normally you'd send this to your backend
-    setSubmitted(true);
-    console.log("Order submitted:", { ...formData, cartItems });
-  };
 
-  if (submitted) {
-    return (
-      <div>
-        <h2>Thank you, {formData.name}!</h2>
-        <p>Your order has been placed and will be paid via Cash on Delivery.</p>
-      </div>
+    // Validate form data (ensure name and address are not empty or just whitespace)
+    if (!formData.name.trim() || !formData.address.trim()) {
+      alert("Name and address cannot be empty or just whitespace.");
+      return; // Exit the function if validation fails
+    }
+
+    const response = await fetch(
+      "http://localhost/php-backend/submit_order.php",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ formData, cartItems }),
+      }
     );
-  }
+
+    if (response.ok) {
+      setSubmitted(true);
+      clearCartItems();
+
+      const responseData = await response.json();
+      setOrderSummary(responseData.order);
+
+      console.log("Order placed successfully:", responseData);
+      // console.log("Order submitted:", { ...formData, cartItems });
+    } else {
+      alert("Failed to place order. Please try again.");
+    }
+  };
 
   return (
     <div className="mt-[90px]">
       <div className="max-w-[1240px] mx-auto min-h-screen flex flex-col px-4 py-16">
-        {step === 1 && (
-          <form onSubmit={handleSubmit}>
-            <h2>Shipping Details</h2>
+        {submitted ? (
+          <ConfirmationCard orderSummary={orderSummary} />
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white p-6 rounded-lg shadow-md space-y-6"
+          >
+            <h2 className="text-2xl font-bold mb-4">Shipping Details</h2>
+
             <input
+              type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               placeholder="Full Name"
               required
-              style={{
-                display: "block",
-                marginBottom: "10px",
-                width: "100%",
-              }}
+              className="w-full px-4 py-2 border rounded-md"
             />
+
             <textarea
               name="address"
               value={formData.address}
               onChange={handleChange}
               placeholder="Shipping Address"
               required
-              style={{
-                display: "block",
-                marginBottom: "20px",
-                width: "100%",
-              }}
+              rows="3"
+              className="w-full px-4 py-2 border rounded-md"
             />
-            <h2>Order Summary</h2>
-            <ul>
-              {cartItems.map((item) => (
-                <li key={item.id}>
-                  {item.name} x{item.quantity} - ${item.price * item.quantity}
-                </li>
-              ))}
-            </ul>
-            <p>
-              <strong>Total: ${total}</strong>
-            </p>
-            <button type="submit" style={{ marginTop: "20px" }}>
-              Place Order (Cash on Delivery)
-            </button>
+
+            <OrderSummary cart={cartItems} products={products} />
+            <div className="flex justify-end items-center w-full">
+              <button
+                type="submit"
+                className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-md"
+              >
+                Place Order (Cash on Delivery)
+              </button>
+            </div>
           </form>
         )}
-        {step === 2 && (
-          <>
-            <OrderSummary cart={cartItems} products={products} />
-            <button onClick={() => setStep(1)}>Back to Shipping Details</button>
-          </>
-        )}
-        <button onClick={() => setStep(2)} style={{ marginLeft: "10px" }}>
-          View Order Summary
-        </button>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import {
   addToCart,
   updateQuantity,
   removeFromCart,
+  clearCart,
 } from "../services/CartService";
 
 export const CartContext = createContext();
@@ -43,6 +44,12 @@ export const CartProvider = ({ children }) => {
     setCartItems(updatedCart);
   };
 
+  const clearCartItems = async () => {
+    await clearCart();
+    const updatedCart = await getCart();
+    setCartItems(updatedCart);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -50,6 +57,7 @@ export const CartProvider = ({ children }) => {
         addItem,
         updateItemQuantity,
         removeItem,
+        clearCartItems,
       }}
     >
       {children}

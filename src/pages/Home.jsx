@@ -10,14 +10,13 @@ import { useAuth } from "../context/UseAuth";
 function Home() {
   const { addItem } = useCart();
   const { user } = useAuth();
-
   const [isLoading, setIsLoading] = useState(false);
   const [serverProducts, setServerProducts] = useState([]);
 
   useEffect(() => {
     // Fetch products from the backend when the component mounts
     fetchProducts();
-    console.log(serverProducts);
+    // console.log(serverProducts);
   }, []);
 
   // Fetch products from the php backend
@@ -26,7 +25,7 @@ function Home() {
 
     try {
       const response = await fetch(
-        "http://localhost/php-backend/controllers/ProductController.php",
+        "http://localhost/php-backend/products.php",
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -36,8 +35,7 @@ function Home() {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      console.log(data); // Handle the products as needed
-
+      // console.log(data); // Handle the products as needed
       setServerProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);

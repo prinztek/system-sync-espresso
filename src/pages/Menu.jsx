@@ -22,7 +22,7 @@ function Menu() {
 
     try {
       const response = await fetch(
-        "http://localhost/php-backend/controllers/ProductController.php",
+        "http://localhost/php-backend/products.php",
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

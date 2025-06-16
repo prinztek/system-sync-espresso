@@ -12,10 +12,15 @@ import Footer from "./components/Footer";
 import PageNotFound from "./pages/PageNotFound";
 import Franchise from "./pages/Franchise";
 import AdminSignin from "./pages/AdminSignin";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Checkout from "./pages/Checkout";
 import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import OrderHistory from "./pages/OrderHistory";
+import OrdersList from "./pages/OrdersList";
+import ProductsList from "./pages/ProductsList";
+import EditProduct from "./pages/EditProduct";
+import AddProduct from "./pages/AddProduct";
 
 function App() {
   const [serverProducts, setServerProducts] = useState([]);
@@ -29,7 +34,7 @@ function App() {
   const fetchProducts = async () => {
     try {
       const response = await fetch(
-        "http://localhost/php-backend/controllers/ProductController.php",
+        "http://localhost/php-backend/products.php",
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -48,10 +53,6 @@ function App() {
     }
   };
 
-  const notify = (text, type) => {
-    toast[type](text);
-  };
-
   // Handle Navbar and Footer visibility
   const location = useLocation();
   const hideNavbarFooter =
@@ -63,25 +64,57 @@ function App() {
     <div className="min-h-screen flex flex-col">
       {!hideNavbarFooter && <Navbar />}
       <Routes>
-        <Route path="/" element={<Home notify={notify} />} />
+        <Route path="/" element={<Home />} />
         <Route path="franchise" element={<Franchise />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
+        <Route path="/order-history" element={<OrderHistory />} />
         <Route
           path="/checkout"
           element={<Checkout products={serverProducts} />}
         />
         <Route path="/cart" element={<Cart products={serverProducts} />} />
         <Route path="/admin-signin" element={<AdminSignin />} />
-
         <Route
           path="/admin-dashboard"
           element={
             <ProtectedRoute>
               <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute>
+              <OrdersList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/products"
+          element={
+            <ProtectedRoute>
+              <ProductsList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/products/edit/:id"
+          element={
+            <ProtectedRoute>
+              <EditProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/products/add"
+          element={
+            <ProtectedRoute>
+              <AddProduct />
             </ProtectedRoute>
           }
         />
