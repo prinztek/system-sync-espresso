@@ -25,7 +25,7 @@ function Checkout({ products }) {
 
   const [submitted, setSubmitted] = useState(false);
 
-  // optional - grab the user details from the last order
+  // optional - grab the user details from the last order (useEffect) to display their information
 
   useEffect(() => {
     if (!user) {
@@ -45,7 +45,7 @@ function Checkout({ products }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate form data (ensure name and address are not empty or just whitespace)
+    // ensure name and address are not empty or whitespace
     if (!formData.name.trim() || !formData.address.trim()) {
       alert("Name and address cannot be empty or just whitespace.");
       return; // Exit the function if validation fails

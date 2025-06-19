@@ -13,7 +13,7 @@ function EditProduct() {
         const res = await fetch(
           `http://localhost/php-backend/get_product.php?id=${id}`,
           {
-            credentials: "include", // Include credentials for session management
+            credentials: "include",
           }
         );
         const data = await res.json();
@@ -41,7 +41,7 @@ function EditProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await fetch("http://localhost/php-backend/update_product.php", {
-      credentials: "include", // Include credentials for session management
+      credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(product),
@@ -124,7 +124,7 @@ function EditProduct() {
 
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded"
+          className="bg-amber-600 text-white px-6 py-3 rounded hover:bg-orange-700 mt-6"
         >
           Save Changes
         </button>

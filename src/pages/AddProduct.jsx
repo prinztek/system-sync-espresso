@@ -64,14 +64,14 @@ export default function AddProduct() {
     formData.append("type", form.type);
     formData.append("ingredients", form.ingredients);
     formData.append("available", form.available ? "1" : "0");
-    formData.append("stock_quantity", "0"); // If you're not using it, you can set it to 0
+    formData.append("stock_quantity", "0"); // unused
 
-    // Image file
+    // Image
     if (form.image) {
       formData.append("image", form.image);
     }
 
-    // Sizes (send as JSON string)
+    // JSON string Sizes
     formData.append("sizes", JSON.stringify(form.sizes));
     console.log(formData);
 
@@ -81,7 +81,7 @@ export default function AddProduct() {
         {
           method: "POST",
           body: formData,
-          credentials: "include", // if you're using sessions
+          credentials: "include",
         }
       );
 

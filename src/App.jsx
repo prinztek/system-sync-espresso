@@ -21,8 +21,10 @@ import OrdersList from "./pages/OrdersList";
 import ProductsList from "./pages/ProductsList";
 import EditProduct from "./pages/EditProduct";
 import AddProduct from "./pages/AddProduct";
+import { useAuth } from "./context/UseAuth";
 
 function App() {
+  const { isAdmin, isUser, user } = useAuth();
   const [serverProducts, setServerProducts] = useState([]);
 
   useEffect(() => {
@@ -63,64 +65,63 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col">
       {!hideNavbarFooter && <Navbar />}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="franchise" element={<Franchise />} />
-        <Route path="/menu" element={<Menu />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/order-history" element={<OrderHistory />} />
-        <Route
-          path="/checkout"
-          element={<Checkout products={serverProducts} />}
-        />
-        <Route path="/cart" element={<Cart products={serverProducts} />} />
-        <Route path="/admin-signin" element={<AdminSignin />} />
-        <Route
-          path="/admin-dashboard"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/orders"
-          element={
-            <ProtectedRoute>
-              <OrdersList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/products"
-          element={
-            <ProtectedRoute>
-              <ProductsList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/products/edit/:id"
-          element={
-            <ProtectedRoute>
-              <EditProduct />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/products/add"
-          element={
-            <ProtectedRoute>
-              <AddProduct />
-            </ProtectedRoute>
-          }
-        />
 
+      <Routes>
+        {/* PUBLIC + USER ROUTES */}
+        {!isAdmin && (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/menu" element={<Menu />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/admin-signin" element={<AdminSignin />} />
+            <Route path="/franchise" element={<Franchise />} />
+
+            {/* AUTHENTICATED USER ROUTES */}
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoute>
+                  <Cart products={serverProducts} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute>
+                  <Checkout products={serverProducts} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/order-history"
+              element={
+                <ProtectedRoute>
+                  <OrderHistory />
+                </ProtectedRoute>
+              }
+            />
+          </>
+        )}
+
+        {/* ADMIN ROUTES */}
+        {isAdmin && (
+          <>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/orders" element={<OrdersList />} />
+            <Route path="/admin/products" element={<ProductsList />} />
+            <Route path="/admin/products/edit/:id" element={<EditProduct />} />
+            <Route path="/admin/products/add" element={<AddProduct />} />
+          </>
+        )}
+
+        {/* Catch-all */}
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+
       {!hideNavbarFooter && <Footer />}
       <ToastContainer />
     </div>

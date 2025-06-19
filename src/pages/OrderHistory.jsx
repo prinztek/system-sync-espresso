@@ -39,7 +39,7 @@ function OrderHistory() {
   return (
     <div className="mt-[90px]">
       <div className="max-w-[1240px] mx-auto min-h-screen flex flex-col px-4 py-16">
-        <h1 className="text-3xl font-bold mb-6">📦 Order History</h1>
+        <h1 className="text-3xl font-bold mb-6">Order History</h1>
 
         {orders.length === 0 ? (
           <p className="text-gray-600">You have no past orders.</p>

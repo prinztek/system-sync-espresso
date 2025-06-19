@@ -38,11 +38,11 @@ export const UserProvider = ({ children }) => {
         setUser(null); // Handle error and reset user state
       }
 
-      setIsReady(true); // Mark the app as ready after the session check
+      setIsReady(true);
     };
 
-    verifySession(); // Call the session verification function
-  }, []); // Empty dependency array ensures this only runs on component mount
+    verifySession();
+  }, []); // only run on component mount
 
   const signUpUser = async (email, username, password) => {
     try {

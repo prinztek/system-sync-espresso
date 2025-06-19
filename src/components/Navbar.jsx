@@ -5,7 +5,7 @@ import { useAuth } from "../context/UseAuth";
 import { useCart } from "../context/useCart";
 
 const Navbar = () => {
-  const { isLoggedIn, logoutUser } = useAuth();
+  const { isLoggedIn, logoutUser, isAdmin } = useAuth();
   const { cartItems } = useCart();
   const [nav, setNav] = useState(false);
 
@@ -27,7 +27,7 @@ const Navbar = () => {
         {/* Navigation on large screens */}
         <div className="max-w-[1240px] px-8 flex justify-between items-center w-full h-full">
           <div className="text-center">
-            <NavLink to="/">
+            <NavLink to={isAdmin ? "/admin-dashboard" : "/"}>
               <span className="text-sm sm:text-base font-bold text-gray-800 block -mb-2">
                 System Sync
               </span>
@@ -36,38 +36,76 @@ const Navbar = () => {
               </span>
             </NavLink>
           </div>
+
           <div className="hidden md:flex items-center justify-center px-6 py-1">
             <ul className="hidden md:flex justify-around items-center">
-              <li className="px-6">
-                <NavLink
-                  to="/menu"
-                  className={({ isActive }) =>
-                    isActive ? "border-b border-b-amber-600" : ""
-                  }
-                >
-                  Menu
-                </NavLink>
-              </li>
-              <li className="px-6">
-                <NavLink
-                  to="/about"
-                  className={({ isActive }) =>
-                    isActive ? "border-b border-b-amber-600" : ""
-                  }
-                >
-                  About
-                </NavLink>
-              </li>
-              <li className="px-6">
-                <NavLink
-                  to="/contact"
-                  className={({ isActive }) =>
-                    isActive ? "border-b border-b-amber-600" : ""
-                  }
-                >
-                  Contact
-                </NavLink>
-              </li>
+              {isAdmin ? (
+                <>
+                  <li className="px-6">
+                    <NavLink
+                      to="/admin-dashboard"
+                      className={({ isActive }) =>
+                        isActive ? "border-b border-b-amber-600" : ""
+                      }
+                    >
+                      Dashboard
+                    </NavLink>
+                  </li>
+                  <li className="px-6">
+                    <NavLink
+                      to="/admin/products"
+                      className={({ isActive }) =>
+                        isActive ? "border-b border-b-amber-600" : ""
+                      }
+                    >
+                      Products
+                    </NavLink>
+                  </li>
+                  <li className="px-6">
+                    <NavLink
+                      to="/admin/orders"
+                      className={({ isActive }) =>
+                        isActive ? "border-b border-b-amber-600" : ""
+                      }
+                    >
+                      Orders
+                    </NavLink>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="px-6">
+                    <NavLink
+                      to="/menu"
+                      className={({ isActive }) =>
+                        isActive ? "border-b border-b-amber-600" : ""
+                      }
+                    >
+                      Menu
+                    </NavLink>
+                  </li>
+                  <li className="px-6">
+                    <NavLink
+                      to="/about"
+                      className={({ isActive }) =>
+                        isActive ? "border-b border-b-amber-600" : ""
+                      }
+                    >
+                      About
+                    </NavLink>
+                  </li>
+                  <li className="px-6">
+                    <NavLink
+                      to="/contact"
+                      className={({ isActive }) =>
+                        isActive ? "border-b border-b-amber-600" : ""
+                      }
+                    >
+                      Contact
+                    </NavLink>
+                  </li>
+                </>
+              )}
               <li className="px-6">
                 {isLoggedIn() ? (
                   <button onClick={logoutUser}>Logout</button>
@@ -77,12 +115,16 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          <Link to={"/cart"}>
-            <div className="hidden md:flex justify-around items-center  rounded-lg bg-black border-2 border-white  px-5 py-1">
-              <ShoppingCartIcon className="w-6  text-white cursor-pointer" />
-              <span className="text-white ml-3">{cartItems?.length}</span>
-            </div>
-          </Link>
+
+          {!isAdmin && (
+            <Link to="/cart">
+              <div className="hidden md:flex justify-around items-center rounded-lg bg-black border-2 border-white px-5 py-1">
+                <ShoppingCartIcon className="w-6 text-white cursor-pointer" />
+                <span className="text-white ml-3">{cartItems?.length}</span>
+              </div>
+            </Link>
+          )}
+
           <div className="md:hidden" onClick={handleClick}>
             {nav ? (
               <XIcon className="w-6 cursor-pointer" />
@@ -98,21 +140,51 @@ const Navbar = () => {
             nav ? "flex" : "hidden"
           } flex-col items-start bg-white w-full h-screen px-8 py-8 text-lg`}
         >
-          <li className="w-full my-4 border-b">
-            <NavLink to="/menu" onClick={handleClose}>
-              Menu
-            </NavLink>
-          </li>
-          <li className="w-full my-4 border-b">
-            <NavLink to="/about" onClick={handleClose}>
-              About
-            </NavLink>
-          </li>
-          <li className="w-full my-4 border-b">
-            <NavLink to="/contact" onClick={handleClose}>
-              Contact
-            </NavLink>
-          </li>
+          {isAdmin ? (
+            <>
+              <li className="w-full my-4 border-b">
+                <NavLink to="/admin-dashboard" onClick={handleClose}>
+                  Dashboard
+                </NavLink>
+              </li>
+              <li className="w-full my-4 border-b">
+                <NavLink to="/admin/products" onClick={handleClose}>
+                  Products
+                </NavLink>
+              </li>
+              <li className="w-full my-4 border-b">
+                <NavLink to="/admin/orders" onClick={handleClose}>
+                  Orders
+                </NavLink>
+              </li>
+            </>
+          ) : (
+            <>
+              <li className="w-full my-4 border-b">
+                <NavLink to="/menu" onClick={handleClose}>
+                  Menu
+                </NavLink>
+              </li>
+              <li className="w-full my-4 border-b">
+                <NavLink to="/about" onClick={handleClose}>
+                  About
+                </NavLink>
+              </li>
+              <li className="w-full my-4 border-b">
+                <NavLink to="/contact" onClick={handleClose}>
+                  Contact
+                </NavLink>
+              </li>
+              <li className="w-full my-4 border-b">
+                <NavLink to="/cart" onClick={handleClose}>
+                  <div className="flex items-center space-x-2">
+                    <ShoppingCartIcon className="w-6" />
+                    <span>{cartItems?.length}</span>
+                  </div>
+                </NavLink>
+              </li>
+            </>
+          )}
           <li className="w-full my-4 border-b">
             {isLoggedIn() ? (
               <button onClick={logoutUser} className="text-left">
@@ -123,14 +195,6 @@ const Navbar = () => {
                 Sign In
               </NavLink>
             )}
-          </li>
-          <li className="w-full my-4 border-b">
-            <NavLink to="/cart" onClick={handleClose}>
-              <div className="flex items-center space-x-2">
-                <ShoppingCartIcon className="w-6" aria-label="Shopping Cart" />
-                <span>{cartItems?.length}</span>
-              </div>
-            </NavLink>
           </li>
         </ul>
       </nav>

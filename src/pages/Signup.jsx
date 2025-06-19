@@ -25,19 +25,30 @@ const Signup = () => {
     }));
   };
 
+  function isStrongPassword(password) {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password);
+  }
+
   function validatePasswords() {
     if (newUserCredentials.password !== newUserCredentials.confirmPassword) {
-      alert("password does not match");
+      notify("Passwords do not match.", "warn");
       return false;
-    } else {
-      return true;
     }
+
+    if (!isStrongPassword(newUserCredentials.password)) {
+      notify(
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
+        "warn"
+      );
+      return false;
+    }
+
+    return true;
   }
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (!validatePasswords()) {
-      notify("Passwords do not match!", "warn");
       return;
     }
 
@@ -134,6 +145,18 @@ const Signup = () => {
             Create New Account
           </button>
         </form>
+        <div className="px-5 pb-6 pt-2 text-sm text-gray-600">
+          <p className="font-medium text-gray-700 mb-1">
+            Password must contain:
+          </p>
+          <ul className="list-disc list-inside space-y-1">
+            <li>At least 8 characters</li>
+            <li>At least 1 uppercase letter (A–Z)</li>
+            <li>At least 1 lowercase letter (a–z)</li>
+            <li>At least 1 number (0–9)</li>
+            <li>At least 1 special character (e.g. !@#$%^&*)</li>
+          </ul>
+        </div>
       </div>
     </div>
   );
