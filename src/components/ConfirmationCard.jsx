@@ -71,7 +71,7 @@ function ConfirmationCard({ orderSummary }) {
           onClick={() => navigate("/menu")}
           className="bg-amber-600 hover:bg-orange-700 text-white px-6 py-2 rounded-md"
         >
-          🍽️ Order More
+          Order More
         </button>
       </div>
     </div>
