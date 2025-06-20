@@ -14,6 +14,8 @@ function CartItems({
         const price = sizeObj ? sizeObj.price : 0;
         const sizeName = sizeObj ? sizeObj.name : "Unknown size";
         const totalPrice = price * item.quantity;
+        const stock_quantity = product.stock_quantity;
+        const type = product.type;
 
         return (
           <div
@@ -50,18 +52,39 @@ function CartItems({
                 -
               </button>
               <span className="px-4">{item.quantity}</span>
-              <button
-                className="px-2 py-1 border rounded"
-                onClick={() =>
-                  handleQuantityChange(
-                    item.product_id,
-                    item.size_id,
-                    item.quantity + 1
-                  )
-                }
-              >
-                +
-              </button>
+              {type === "Drink" ? (
+                <button
+                  className="px-2 py-1 border rounded"
+                  onClick={() =>
+                    handleQuantityChange(
+                      item.product_id,
+                      item.size_id,
+                      item.quantity + 1
+                    )
+                  }
+                >
+                  +
+                </button>
+              ) : (
+                <button
+                  className={
+                    item.quantity >= stock_quantity
+                      ? "px-2 py-1 border rounded bg-gray-200"
+                      : "px-2 py-1 border rounded"
+                  }
+                  onClick={() =>
+                    handleQuantityChange(
+                      item.product_id,
+                      item.size_id,
+                      item.quantity + 1
+                    )
+                  }
+                  disabled={item.quantity >= stock_quantity}
+                >
+                  +
+                </button>
+              )}
+
               <button
                 className="ml-5 sm:mt-0 sm:ml-4 text-red-600 hover:underline"
                 onClick={() =>

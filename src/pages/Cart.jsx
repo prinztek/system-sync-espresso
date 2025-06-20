@@ -11,19 +11,17 @@ function Cart({ products }) {
 
   useEffect(() => {
     console.log("Cart component mounted or updated");
-    // You can add any additional logic here if needed
     console.log("Cart items:", cartItems);
     console.log("Cart items:", user);
-  }, []);
+  }, [cartItems]);
 
   function handleCheckout() {
     if (!isLoggedIn()) {
       navigate("/signin");
     } else {
-      // Proceed to checkout logic
+      // Proceed to checkout
       console.log("Proceeding to checkout with items:", cartItems);
       navigate("/checkout");
-      // You can redirect to a checkout page or handle the checkout process here
     }
   }
 

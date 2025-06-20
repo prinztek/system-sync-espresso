@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function ProductsList() {
   const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(""); // search term  (name, type, description)
   const [sortDirection, setSortDirection] = useState("asc"); // sort by name
 
   useEffect(() => {
@@ -12,12 +12,13 @@ function ProductsList() {
         const response = await fetch(
           "http://localhost/php-backend/admin_products.php",
           {
-            credentials: "include", // Include credentials for session management
+            credentials: "include",
           }
         );
 
         const data = await response.json();
         setProducts(data);
+        console.log("Fetched products:", data);
       } catch (err) {
         console.error("Failed to fetch products", err);
       }
@@ -30,6 +31,7 @@ function ProductsList() {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this product?"
     );
+
     if (!confirmDelete) return;
 
     const response = await fetch(
@@ -112,6 +114,7 @@ function ProductsList() {
             <th className="border p-2">Ingredients</th>
             <th className="border p-2">Sizes / Prices</th>
             <th className="border p-2">Available</th>
+            <th className="border p-2">Stock Quantity</th>
             <th className="border p-2">Actions</th>
           </tr>
         </thead>
@@ -137,7 +140,10 @@ function ProductsList() {
                 ))}
               </td>
               <td className="border p-2">{product.available ? "✅" : "❌"}</td>
-              <td className="border p-2 space-x-2">
+              <td className="border p-2">
+                {product.type === "Food" ? product.stock_quantity : "N/A"}
+              </td>
+              <td className="border p-2 flex flex-col items-center justify-center space-y-1">
                 <Link
                   to={`/admin/products/edit/${product.id}`}
                   className="text-blue-600 underline"

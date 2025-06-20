@@ -39,6 +39,7 @@ function EditProduct() {
   };
 
   const handleSubmit = async (e) => {
+    console.log("Submitting product:", product);
     e.preventDefault();
     await fetch("http://localhost/php-backend/update_product.php", {
       credentials: "include",
@@ -88,13 +89,16 @@ function EditProduct() {
         <label className="ml-2" htmlFor="available">
           Available
         </label>
-        <input
-          name="image_url"
-          value={product.image_url}
-          onChange={handleChange}
-          placeholder="Image URL"
-          className="w-full p-2 border rounded"
-        />
+        {product.type === "Food" ? (
+          <input
+            type="number"
+            name="stock_quantity"
+            value={product.stock_quantity}
+            onChange={handleChange}
+            placeholder="Stock Quantity"
+            className="w-full p-2 border rounded"
+          />
+        ) : null}
         <input
           name="ingredients"
           value={product.ingredients.join(", ")}

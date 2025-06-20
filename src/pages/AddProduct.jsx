@@ -11,7 +11,7 @@ export default function AddProduct() {
     ingredients: "",
     available: true,
     image: null,
-    stock_quantity: 0,
+    stock_quantity: null,
     sizes: [],
   });
 
@@ -64,7 +64,7 @@ export default function AddProduct() {
     formData.append("type", form.type);
     formData.append("ingredients", form.ingredients);
     formData.append("available", form.available ? "1" : "0");
-    formData.append("stock_quantity", "0"); // unused
+    formData.append("stock_quantity", form.stock_quantity); // used only for "Food"
 
     // Image
     if (form.image) {
@@ -146,19 +146,23 @@ export default function AddProduct() {
               className="border rounded p-3 w-full"
               required
             />
-
-            {/* <input
-              type="number"
-              placeholder="Stock Quantity"
-              value={form.stock_quantity}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  stock_quantity: parseInt(e.target.value) || 0,
-                })
-              }
-              className="border rounded p-3 w-full"
-            /> */}
+            {form.type === "Food" ? (
+              <input
+                type="number"
+                placeholder="Stock Quantity"
+                value={form.stock_quantity}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    stock_quantity: parseInt(e.target.value) || null,
+                  })
+                }
+                className="border rounded p-3 w-full"
+                required
+                min={1}
+                max={100}
+              />
+            ) : null}
           </div>
 
           {/* Toggle only if Drink */}
