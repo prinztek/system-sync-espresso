@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function AddProduct() {
   const navigate = useNavigate();
-
+  const notify = (text, type) => {
+    toast[type](text);
+  };
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -58,22 +61,14 @@ export default function AddProduct() {
     e.preventDefault();
 
     const formData = new FormData();
-
     formData.append("name", form.name);
     formData.append("description", form.description);
     formData.append("type", form.type);
     formData.append("ingredients", form.ingredients);
     formData.append("available", form.available ? "1" : "0");
-    formData.append("stock_quantity", form.stock_quantity); // used only for "Food"
-
-    // Image
-    if (form.image) {
-      formData.append("image", form.image);
-    }
-
-    // JSON string Sizes
+    formData.append("stock_quantity", form.stock_quantity);
+    if (form.image) formData.append("image", form.image);
     formData.append("sizes", JSON.stringify(form.sizes));
-    console.log(formData);
 
     try {
       const response = await fetch(
@@ -86,13 +81,14 @@ export default function AddProduct() {
       );
 
       if (response.ok) {
+        notify("Product added successfully!", "success");
         navigate("/admin/products");
       } else {
-        alert("Failed to add product");
+        notify("Failed to add product. Please try again.", "error");
       }
     } catch (err) {
       console.error("Error uploading product:", err);
-      alert("Something went wrong");
+      notify("Something went wrong while adding the product.", "error");
     }
   };
 

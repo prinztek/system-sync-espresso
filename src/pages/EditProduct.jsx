@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const notify = (text, type) => {
+    toast[type](text);
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -39,15 +43,42 @@ function EditProduct() {
   };
 
   const handleSubmit = async (e) => {
-    console.log("Submitting product:", product);
     e.preventDefault();
-    await fetch("http://localhost/php-backend/admin/update_product.php", {
-      credentials: "include",
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(product),
-    });
-    navigate("/admin/products");
+
+    // Validation: Only allow Food to be available if stock_quantity is provided
+    if (
+      product.type === "Food" &&
+      (product.available === 1 || product.available === true) &&
+      (!product.stock_quantity || product.stock_quantity <= 0)
+    ) {
+      notify(
+        "Stock quantity must be greater than 0 if the product is available.",
+        "error"
+      );
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost/php-backend/admin/update_product.php",
+        {
+          credentials: "include",
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(product),
+        }
+      );
+
+      if (response.ok) {
+        notify("Product updated successfully!", "success");
+        navigate("/admin/products");
+      } else {
+        notify("Failed to update product. Please try again.", "error");
+      }
+    } catch (err) {
+      console.error("Update failed:", err);
+      notify("An error occurred while updating the product.", "error");
+    }
   };
 
   if (loading) return <div>Loading...</div>;

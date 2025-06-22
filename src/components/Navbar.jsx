@@ -120,7 +120,9 @@ const Navbar = () => {
             <Link to="/cart">
               <div className="hidden md:flex justify-around items-center rounded-lg bg-black border-2 border-white px-5 py-1">
                 <ShoppingCartIcon className="w-6 text-white cursor-pointer" />
-                <span className="text-white ml-3">{cartItems?.length}</span>
+                <span className="text-white ml-3">
+                  {isLoggedIn() ? cartItems?.length || 0 : 0}
+                </span>
               </div>
             </Link>
           )}
@@ -179,7 +181,7 @@ const Navbar = () => {
                 <NavLink to="/cart" onClick={handleClose}>
                   <div className="flex items-center space-x-2">
                     <ShoppingCartIcon className="w-6" />
-                    <span>{cartItems?.length}</span>
+                    {isLoggedIn() ? cartItems?.length || 0 : 0}
                   </div>
                 </NavLink>
               </li>

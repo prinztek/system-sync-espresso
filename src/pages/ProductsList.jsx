@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function ProductsList() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // search term  (name, type, description)
   const [sortDirection, setSortDirection] = useState("asc"); // sort by name
-
+  const notify = (text, type) => {
+    toast[type](text);
+  };
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -34,24 +39,30 @@ function ProductsList() {
 
     if (!confirmDelete) return;
 
-    const response = await fetch(
-      "http://localhost/php-backend/admin/delete_product.php",
-      {
-        credentials: "include",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      }
-    );
+    try {
+      const response = await fetch(
+        "http://localhost/php-backend/admin/delete_product.php",
+        {
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id }),
+        }
+      );
 
-    const result = await response.json();
-    if (result.success) {
-      alert("Product deleted");
-      // Refresh the list or remove from local state
-    } else {
-      alert("Delete failed: " + result.error);
+      const result = await response.json();
+
+      if (result.success) {
+        setProducts((prev) => prev.filter((product) => product.id !== id));
+        notify("Product deleted successfully!", "success");
+      } else {
+        notify("Product delete failed!", "error");
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      notify("Something went wrong while deleting the product.", "error");
     }
   };
 
@@ -150,12 +161,18 @@ function ProductsList() {
                 >
                   Edit
                 </Link>
-                <button
-                  onClick={() => handleDelete(product.id)}
-                  className="text-red-600 hover:underline"
-                >
-                  Delete
-                </button>
+                {product.available ? (
+                  <button
+                    onClick={() => handleDelete(product.id)}
+                    className="text-red-600 hover:underline"
+                  >
+                    Delete
+                  </button>
+                ) : (
+                  <span className="text-gray-400 cursor-not-allowed">
+                    Unavailable
+                  </span>
+                )}
               </td>
             </tr>
           ))}

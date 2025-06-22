@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function OrdersList() {
   const [orders, setOrders] = useState([]);
+
+  const notify = (text, type) => {
+    toast[type](text);
+  };
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -24,22 +29,30 @@ function OrdersList() {
   }, []);
 
   const handleStatusChange = async (orderId, newStatus) => {
-    const response = await fetch(
-      "http://localhost/php-backend/admin/update_order_status.php",
-      {
-        credentials: "include",
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ order_id: orderId, new_status: newStatus }),
-      }
-    );
-
-    if (response.ok) {
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.order_id === orderId ? { ...order, status: newStatus } : order
-        )
+    try {
+      const response = await fetch(
+        "http://localhost/php-backend/admin/update_order_status.php",
+        {
+          credentials: "include",
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order_id: orderId, new_status: newStatus }),
+        }
       );
+
+      if (response.ok) {
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.order_id === orderId ? { ...order, status: newStatus } : order
+          )
+        );
+        notify("Order status updated successfully!", "success");
+      } else {
+        notify("Failed to update order status.", "error");
+      }
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      notify("An error occurred while updating the order.", "error");
     }
   };
 

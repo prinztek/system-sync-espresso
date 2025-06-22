@@ -7,6 +7,7 @@ import {
   checkSession,
 } from "../services/AuthService";
 import { toast } from "react-toastify";
+import { clearCart } from "../services/CartService";
 
 export const UserContext = createContext();
 
@@ -46,18 +47,20 @@ export const UserProvider = ({ children }) => {
 
   const signUpUser = async (email, username, password) => {
     try {
-      const res = await signupAPI(email, username, password);
-      if (res && res.status === "success") {
+      const response = await signupAPI(email, username, password);
+      if (response && response.status === "success") {
         const sessionRes = await checkSession();
         if (sessionRes.status === "success") {
           setUser(sessionRes.user); // Set full user object from status php
           notify("Signup successful!", "success");
-          navigate("/cart");
+          navigate("/");
         } else {
           notify("Signup succeeded but session fetch failed.", "error");
         }
+      } else if (response.error) {
+        notify("Signup failed. Please check your input.", "error");
       } else {
-        notify("Signup failed", "error");
+        notify("Signup failed. Please try again later.", "error");
       }
     } catch (e) {
       console.error(e);
@@ -86,10 +89,14 @@ export const UserProvider = ({ children }) => {
         } else {
           navigate("/");
         }
+      } else if (response.error) {
+        notify("Invalid email or password!", "error");
+      } else {
+        notify("Login failed. Please try again later.", "error");
       }
     } catch (e) {
       console.error(e);
-      notify("Login failed. Please check your credentials.", "error");
+      notify("Something went wrong. Please try again later.", "error");
     }
   };
 
@@ -106,6 +113,7 @@ export const UserProvider = ({ children }) => {
       const response = await logoutAPI();
       if (response.status === "success") {
         setUser(null);
+        await clearCart(); // clear cart
         notify("Logout successful!", "success");
         navigate("/"); // Redirect to home page or dashboard
       } else {
