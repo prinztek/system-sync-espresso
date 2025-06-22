@@ -10,7 +10,7 @@ function ProductsList() {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost/php-backend/admin_products.php",
+          "http://localhost/php-backend/admin/admin_products.php",
           {
             credentials: "include",
           }
@@ -35,7 +35,7 @@ function ProductsList() {
     if (!confirmDelete) return;
 
     const response = await fetch(
-      "http://localhost/php-backend/delete_product.php",
+      "http://localhost/php-backend/admin/delete_product.php",
       {
         credentials: "include",
         method: "POST",

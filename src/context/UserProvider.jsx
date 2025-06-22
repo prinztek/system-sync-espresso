@@ -47,18 +47,17 @@ export const UserProvider = ({ children }) => {
   const signUpUser = async (email, username, password) => {
     try {
       const res = await signupAPI(email, username, password);
-
-      if (res) {
-        const userObject = {
-          user_id: res.user_id,
-          username: res.username,
-          email: res.email,
-          created_at: res.created_at,
-        };
-
-        setUser(userObject);
-        notify("Signup successful!", "success");
-        navigate("/");
+      if (res && res.status === "success") {
+        const sessionRes = await checkSession();
+        if (sessionRes.status === "success") {
+          setUser(sessionRes.user); // Set full user object from status php
+          notify("Signup successful!", "success");
+          navigate("/cart");
+        } else {
+          notify("Signup succeeded but session fetch failed.", "error");
+        }
+      } else {
+        notify("Signup failed", "error");
       }
     } catch (e) {
       console.error(e);
@@ -76,7 +75,7 @@ export const UserProvider = ({ children }) => {
           username: response.user.username,
           email: response.user.email,
           created_at: response.user.created_at,
-          role: response.user.role, // <== IMPORTANT
+          role: response.user.role, // IMPORTANT
         };
 
         setUser(userObject);

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useAuth } from "../context/UseAuth"; // Assuming you have a useAuth hook for authentication context
+import { useAuth } from "../context/UseAuth";
 
 const ProductCard = ({ product, handleAddToCart }) => {
-  const { user } = useAuth(); // Assuming useAuth provides user context
+  const { user } = useAuth();
   const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
 
   const handleChange = (e) => {

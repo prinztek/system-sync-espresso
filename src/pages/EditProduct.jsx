@@ -11,7 +11,7 @@ function EditProduct() {
     const fetchProduct = async () => {
       try {
         const res = await fetch(
-          `http://localhost/php-backend/get_product.php?id=${id}`,
+          `http://localhost/php-backend/admin/get_product.php?id=${id}`,
           {
             credentials: "include",
           }
@@ -41,7 +41,7 @@ function EditProduct() {
   const handleSubmit = async (e) => {
     console.log("Submitting product:", product);
     e.preventDefault();
-    await fetch("http://localhost/php-backend/update_product.php", {
+    await fetch("http://localhost/php-backend/admin/update_product.php", {
       credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },

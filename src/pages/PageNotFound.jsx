@@ -5,7 +5,7 @@ const PageNotFound = () => {
   const { isAdmin } = useAuth();
   return (
     <div className="max-w-[1240px] mx-auto min-h-screen flex flex-col items-center justify-center px-4 py-16">
-      <div className="bg-white shadow-md rounded-lg p-10 w-full max-w-md text-center">
+      <div className="bg-white rounded-lg p-10 w-full max-w-md text-center">
         <h1 className="text-7xl font-extrabold text-amber-600 mb-4">404</h1>
         <h2 className="text-2xl font-semibold text-gray-800 mb-2">
           Page Not Found

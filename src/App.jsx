@@ -24,13 +24,13 @@ import AddProduct from "./pages/AddProduct";
 import { useAuth } from "./context/UseAuth";
 
 function App() {
-  const { isAdmin, isUser, user } = useAuth();
+  const { isAdmin, user } = useAuth();
   const [serverProducts, setServerProducts] = useState([]);
 
   useEffect(() => {
     // Fetch products from the backend when the component mounts
     fetchProducts();
-  }, []);
+  }, [user]);
 
   // Fetch products from the php backend
   const fetchProducts = async () => {
@@ -123,7 +123,7 @@ function App() {
       </Routes>
 
       {!hideNavbarFooter && <Footer />}
-      <ToastContainer />
+      <ToastContainer position="top-left" />
     </div>
   );
 }

@@ -32,7 +32,7 @@ function Menu() {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      console.log(data); // Handle the products as needed
+      console.log(data);
 
       setServerProducts(data);
     } catch (error) {

@@ -7,9 +7,9 @@ function OrdersList() {
     const fetchOrders = async () => {
       try {
         const response = await fetch(
-          "http://localhost/php-backend/orders.php",
+          "http://localhost/php-backend/admin/admin_orders.php",
           {
-            credentials: "include", // Include credentials for session management
+            credentials: "include",
           }
         );
 
@@ -25,9 +25,9 @@ function OrdersList() {
 
   const handleStatusChange = async (orderId, newStatus) => {
     const response = await fetch(
-      "http://localhost/php-backend/update_order_status.php",
+      "http://localhost/php-backend/admin/update_order_status.php",
       {
-        credentials: "include", // Include credentials for session management
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ order_id: orderId, new_status: newStatus }),

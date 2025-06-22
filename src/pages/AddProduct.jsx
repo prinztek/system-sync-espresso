@@ -77,7 +77,7 @@ export default function AddProduct() {
 
     try {
       const response = await fetch(
-        "http://localhost/php-backend/add_product.php",
+        "http://localhost/php-backend/admin/add_product.php",
         {
           method: "POST",
           body: formData,

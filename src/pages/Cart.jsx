@@ -10,10 +10,9 @@ function Cart({ products }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Cart component mounted or updated");
     console.log("Cart items:", cartItems);
-    console.log("Cart items:", user);
-  }, [cartItems]);
+    console.log("User:", user);
+  }, [cartItems, user]);
 
   function handleCheckout() {
     if (!isLoggedIn()) {

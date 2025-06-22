@@ -6,10 +6,12 @@ import {
   removeFromCart,
   clearCart,
 } from "../services/CartService";
+import { useAuth } from "./UseAuth";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  const { user } = useAuth();
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
@@ -18,6 +20,10 @@ export const CartProvider = ({ children }) => {
       const cart = await getCart();
       setCartItems(cart);
     };
+
+    if (user) {
+      fetchCart(); // <-- refetch cart when user changes
+    }
 
     fetchCart();
   }, []);

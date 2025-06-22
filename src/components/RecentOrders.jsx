@@ -7,7 +7,7 @@ function RecentOrders() {
     const fetchOrders = async () => {
       try {
         const response = await fetch(
-          "http://localhost/php-backend/admin/recent_orders.php",
+          "http://localhost/php-backend/admin/admin_recent_orders.php",
           {
             credentials: "include",
           }
@@ -25,7 +25,7 @@ function RecentOrders() {
 
   const handleStatusChange = async (orderId, newStatus) => {
     const response = await fetch(
-      "http://localhost/php-backend/update_order_status.php",
+      "http://localhost/php-backend/admin/update_order_status.php",
       {
         credentials: "include",
         method: "POST",

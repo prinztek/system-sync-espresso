@@ -57,7 +57,7 @@ function OrderSummary({ cart, products }) {
         </table>
       </div>
 
-      {/* Subtotal and Action */}
+      {/* Subtotal */}
       <div className="flex justify-between mb-2">
         <span>Subtotal:</span>
         <span>${calculateSubtotal().toFixed(2)}</span>
